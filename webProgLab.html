@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+   <style>
+    /* General Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    background-color: #f4f6f9;
+    font-size: 16px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    color: #333;
+}
+
+.login-container {
+    background-color: #fff;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 40px;
+    border-radius: 8px;
+    width: 100%;
+    max-width: 400px;
+    box-sizing: border-box;
+}
+
+h2 {
+    text-align: center;
+    font-size: 1.5em;
+    margin-bottom: 1rem;
+    color: #333;
+}
+
+.form-description {
+    text-align: center;
+    color: #666;
+    font-size: 0.875em;
+    margin-bottom: 1.5rem;
+}
+
+.input-group {
+    margin-bottom: 1.25rem;
+}
+
+.input-group label {
+    display: block;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+    color: #555;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 12px;
+    font-size: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    background-color: #fafafa;
+    color: #333;
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+.input-group input:focus {
+    border-color: #519be6;
+    background-color: #eaf3ff;
+}
+
+.btn {
+    width: 100%;
+    padding: 12px;
+    font-size: 1rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.login-btn {
+    background-color: #519be6;
+    color: white;
+}
+
+.login-btn:hover {
+    background-color: #1e52ab;
+    transform: translateY(-2px);
+}
+
+.reset-btn {
+    background-color: #f1f1f1;
+    color:#8540ce;
+    border: 1px solid #b89e9e;
+}
+
+.reset-btn:hover {
+    background-color: #8540ce;
+    color: white;
+    transform: translateY(-2px);
+}
+
+.update-btn {
+    background-color: #6a11cb;
+    color: white;
+}
+
+.update-btn:hover {
+    background-color: #5a0eae;
+    transform: translateY(-2px);
+}
+
+.cancel-btn {
+    background-color: #f1f1f1;
+    color: #333;
+    border: 1px solid #ddd;
+}
+
+.cancel-btn:hover {
+    background-color: #ddd;
+    transform: translateY(-2px);
+}
+
+.update-link {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.update-link a {
+    color: #519be6;
+    text-decoration: none;
+}
+
+.update-link a:hover {
+    text-decoration: underline;
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
+    .login-container {
+        padding: 30px;
+    }
+
+    h2 {
+        font-size: 1.25em;
+    }
+
+    .form-description {
+        font-size: 0.75em;
+    }
+}
+
+
+   </style>
+</head>
+<body>
+
+    <div class="login-container">
+        <!-- Login Form -->
+        <div class="login-form-container">
+            <h2>Welcome Back!</h2>
+            <p class="form-description">Please enter your credentials to continue</p>
+
+            <form id="loginForm" onsubmit="return validateLogin(event)">
+                <div class="input-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="username" required placeholder="Enter your username">
+                </div>
+                <div class="input-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" required placeholder="Enter your password">
+                </div>
+                <button type="submit" class="btn login-btn">Login</button>
+                <button type="button" class="btn reset-btn" onclick="resetForm()">Reset</button>
+                <div class="update-link">
+                    <a href="#" onclick="toggleUpdatePasswordForm()">Update Password</a>
+                </div>
+            </form>
+        </div>
+
+        <!-- Update Password Form (Hidden by default) -->
+        <div class="update-password-container" id="updatePasswordForm" style="display: none;">
+            <h2>Update Password</h2>
+            <p class="form-description">Please fill in your current and new password</p>
+
+            <form id="updatePassword" onsubmit="return updatePassword(event)">
+                <div class="input-group">
+                    <label for="currentPassword">Current Password</label>
+                    <input type="password" id="currentPassword" name="currentPassword" required placeholder="Enter current password">
+                </div>
+                <div class="input-group">
+                    <label for="newPassword">New Password</label>
+                    <input type="password" id="newPassword" name="newPassword" required placeholder="Enter new password">
+                </div>
+                <div class="input-group">
+                    <label for="confirmNewPassword">Confirm New Password</label>
+                    <input type="password" id="confirmNewPassword" name="confirmNewPassword" required placeholder="Confirm new password">
+                </div>
+                <button type="submit" class="btn update-btn">Update Password</button>
+                <button type="button" class="btn cancel-btn" onclick="toggleUpdatePasswordForm()">Cancel</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+// Function to validate the login form
+function validateLogin(event) {
+    event.preventDefault();
+
+    const username = document.getElementById('username').value;
+    const password = document.getElementById('password').value;
+
+    // Predefined username (hardcoded)
+    const correctUsername = "user123"; // Example username
+
+    // Retrieve the correct password from localStorage or use the default if not set
+    const storedPassword = localStorage.getItem('password') || "password123"; // Default password
+
+    // Validate against the stored credentials
+    if (username === correctUsername && password === storedPassword) {
+        alert('Login Successful');
+        // Here you can redirect to another page or do other things after a successful login
+    } else {
+        alert('Invalid username or password');
+    }
+    return false;
+}
+
+// Function to reset the login form
+function resetForm() {
+    document.getElementById('loginForm').reset();
+}
+
+// Toggle between login and update password forms
+function toggleUpdatePasswordForm() {
+    const loginForm = document.getElementById('loginForm');
+    const updatePasswordForm = document.getElementById('updatePasswordForm');
+
+    // Toggle visibility of forms
+    loginForm.style.display = loginForm.style.display === 'none' ? 'block' : 'none';
+    updatePasswordForm.style.display = updatePasswordForm.style.display === 'none' ? 'block' : 'none';
+}
+
+// Function to handle password update
+function updatePassword(event) {
+    event.preventDefault();
+
+    const currentPassword = document.getElementById('currentPassword').value;
+    const newPassword = document.getElementById('newPassword').value;
+    const confirmNewPassword = document.getElementById('confirmNewPassword').value;
+
+    // Basic validation
+    if (!currentPassword || !newPassword || !confirmNewPassword) {
+        alert('Please fill in all fields');
+        return false;
+    }
+
+    // Retrieve the correct password from localStorage or default
+    const storedPassword = localStorage.getItem('password') || "password123";
+
+    // Check if the current password matches the stored password
+    if (currentPassword !== storedPassword) {
+        alert('Current password is incorrect');
+        return false;
+    }
+
+    // Ensure new password and confirm password match
+    if (newPassword !== confirmNewPassword) {
+        alert('New password and confirmation do not match');
+        return false;
+    }
+
+    // Update the password in localStorage
+    localStorage.setItem('password', newPassword);
+
+    alert('Password updated successfully');
+    toggleUpdatePasswordForm(); // Close the update form
+    return true;
+}
+
+
+    </script>
+</body>
+</html>
